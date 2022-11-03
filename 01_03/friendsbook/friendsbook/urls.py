@@ -1,4 +1,4 @@
-from post.views import post_detail, post_feed, add_post
+from post.views import post_detail, post_feed, add_post, PostList
 from profilepage.views import profile_detail
 from useraccount.views import useraccount_edit
 from business.views import business_listing
@@ -19,9 +19,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from post.views import handler_404
+
+handler404 = handler_404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +33,9 @@ urlpatterns = [
     path('add_post', add_post),
     path('profile/<int:profilepage_id>', profile_detail, name='profile page'),
     path('useraccount/<int:useraccount_id>/edit', useraccount_edit, name='edit user profile'),
-    path('businesses', business_listing, name='business_listing')
+    path('businesses', business_listing, name='business_listing'),
+    path('postlist', PostList.as_view(), name='postlist'),
+    path('account/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
